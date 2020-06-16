@@ -30,6 +30,7 @@ function App() {
   return (
     <div className="App">
     {console.log(products)}
+    {console.log(window.location.hostname)}
       <h1>hello!</h1>
       {products.map((product) => {
         return (

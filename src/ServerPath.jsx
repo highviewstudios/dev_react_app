@@ -8,9 +8,9 @@ function BuildHostPath() {
     const protocol = window.location.protocol;
 
     if(host === "localhost") {
-        hostPath = protocol + "//" + host + ":8080"
+        hostPath = protocol + "//" + host + ":8080";
     } else {
-
+        hostPath = protocol +"//" + host;
     }  
 }
 

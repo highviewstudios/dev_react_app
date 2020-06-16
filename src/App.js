@@ -18,16 +18,18 @@ function App() {
   }
 
   function getProducts() {
-    fetch("http://localhost:8080/products")
+    fetch("http://localhost/products")
     .then(response => response.json())
     .then(({ data }) => {
       enterProducts(data);
+      console.log(products);
     })
     .catch(err => console.error(err));
   }
 
   return (
     <div className="App">
+    {console.log(products)}
       <h1>hello!</h1>
       {products.map((product) => {
         return (

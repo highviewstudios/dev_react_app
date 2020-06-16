@@ -18,7 +18,7 @@ function App() {
   }
 
   function getProducts() {
-    fetch("http://react-development.high-view-studios.co.uk/products")
+    fetch("https://react-development.high-view-studios.co.uk/products")
     .then(response => response.json())
     .then(({ data }) => {
       enterProducts(data);

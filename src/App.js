@@ -18,7 +18,7 @@ function App() {
   }
 
   function getProducts() {
-    fetch("http://localhost/products")
+    fetch("http://localhost:3306/products")
     .then(response => response.json())
     .then(({ data }) => {
       enterProducts(data);

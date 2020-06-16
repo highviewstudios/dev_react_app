@@ -11,8 +11,6 @@ function App() {
   useEffect(() => {
     ServerPath();
     getProducts();
-    console.log(hostPath);
-    
   },[]);
 
   function enterProducts(data) {
@@ -32,6 +30,7 @@ function App() {
 
   return (
     <div className="App">
+        {console.log(hostPath)}
       <h1>hello!</h1>
       {products.map((product) => {
         return (

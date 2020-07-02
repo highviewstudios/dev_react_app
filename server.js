@@ -1,63 +1,49 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const passport = require('passport');
 const path = require('path');
+const cookieSession = require('cookie-session');
 const cors = require('cors');
-const mysql = require('mysql');
+
+const initialisePassport = require('./passport/passport-config');
+initialisePassport(passport);
 
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'build')));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
+app.use(cookieSession({
+    name: 'session',
+    keys: ["key1, key2"]
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME
+//MAIN ROUTE
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-connection.connect(err => {
-    if(err) {
-        return err;
-    }
-});
+//ROUTE FILES
+const userLogin = require('./routes/userLogin');
+const products = require('./routes/products');
+const { Redirect } = require('react-router-dom');
+app.use(userLogin);
+app.use(products);
 
-//QUERIES
-const SELECT_ALL_PRODUCTS_QUERY = "SELECT * FROM products";
 
-app.get('/products', function(req, res) {
-    connection.query(SELECT_ALL_PRODUCTS_QUERY, (err, results) => {
-        if(err) {
-            return res.send(err);
-        } else {
-            return res.json({
-                data: results
-            });
-        }
-    });
-});
-
-app.get('/products/add', function(req, res) {
-    const {name, price} = req.query;
-    const INSERT_PRODUCTS_QUERY ="INSERT INTO products (name, price) VALUES('" + name + "'," + price + ")";
-
-    connection.query(INSERT_PRODUCTS_QUERY, (err, results) => {
-        if(err) {
-            return res.send(err);
-        } else {
-            return res.send("Successfully added product");
-        }
-    });
-});
-
+//TESTING ROUTES
 app.get('/ping', (req, res) => {
     return res.send('pong');
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+app.post('/form', (req, res) => {
+    console.log('hit');
+    const name = req.body.name;
+    console.log(name);
+})
 
 
 app.listen(process.env.PORT || 8080, function (req, res) {
